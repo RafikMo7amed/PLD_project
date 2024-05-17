@@ -1,0 +1,91 @@
+"start symbol" = <program>
+
+!--------terminal-------
+Id = [_]{letter}{alphanumeric}*
+Digit = ('+'|'-')?{digit}
+
+!--------rules----------
+<program> ::= 'start' <stmt_list> 'end'
+
+<stmt_list> ::= <stmt>
+              | <stmt> <stmt_list>
+
+<stmt> ::= <concept>
+         | <print_stmt>
+
+<concept> ::= <assign>
+            | <if_stmt>
+            | <switch_stmt>
+            | <for_stmt>
+            | <while_stmt>
+            | <do_while_stmt>
+            | <func_def>
+            | <func_call>
+
+! ASSIGNMENT STATEMENT
+<assign> ::= <id> '=' <expr>
+
+<id> ::= Id
+
+<expr> ::= <expr> '+' <term>
+         | <expr> '-' <term>
+         | <term>
+
+<term> ::= <term> '*' <factor>
+         | <term> '/' <factor>
+         | <term> '%' <factor>
+         | <factor>
+
+<factor> ::= '(' <expr> ')'
+           | <id>
+           | <digit>
+
+<digit> ::= Digit
+         
+! IF STATEMENT
+<if_stmt> ::= 'if' '(' <cond> ')' ':' <stmt_block>
+            | 'if' '(' <cond> ')' ':' <stmt_block> 'else:' <stmt_block>
+
+<cond> ::= <expr> <op> <expr>
+
+<op> ::= '<' | '>' | '==' | '!='
+
+<stmt_block> ::= <stmt>
+               | <stmt> <stmt_block>
+
+! SWITCH STATEMENT
+<switch_stmt> ::= 'switch' '(' <expr> ')' ':' <case_block>
+                 
+<case_block> ::= <case_stmt>
+               | <case_stmt> <case_block>
+               | 'default:' <stmt_block>
+
+<case_stmt> ::= 'case' <expr> ':' <stmt_block>
+
+! FOR LOOP STATEMENT
+<for_stmt> ::= 'for' <id> 'in' 'range' '(' <expr> ')' ':' <stmt_block>
+
+! WHILE LOOP STATEMENT
+<while_stmt> ::= 'while' '(' <cond> ')' ':' <stmt_block>
+
+! DO-WHILE LOOP STATEMENT
+<do_while_stmt> ::= 'do' ':' <stmt_block> 'while' '(' <cond> ')'
+
+! DEFINING FUNCTIONS
+<func_def> ::= 'def' <id> '(' <param_list> ')' ':' <stmt_block>
+
+<param_list> ::= <param>
+               | <param> ',' <param_list>
+
+<param> ::= <id>
+
+! CALLING FUNCTIONS
+<func_call> ::= <id> '(' ')'
+              | <id> '(' <arg_list> ')'
+
+<arg_list> ::= <expr>
+             | <expr> ',' <arg_list>
+
+! PRINT STATEMENT
+<print_stmt> ::= 'print' '(' <expr> ')'
+
